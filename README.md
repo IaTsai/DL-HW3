@@ -6,16 +6,15 @@ This project implements a customizable Mask R-CNN training pipeline for cell ins
 
 ## Project Structure Overview
 
-| File | Description |
-| :-- | :-- |
-| `datasets.py` | Custom PyTorch `Dataset` class to load images and per-instance cell masks for training/validation. Supports multi-class `.tif` masks. |
-| `train.py` | Main training script. Supports AMP, FPN, attention modules, learning rate warmup, early stopping, and COCOEval-based mAP evaluation. |
-| `transforms.py` | Defines torchvision transforms for data augmentation during training and resizing/normalization during validation. |
-| `utils.py` | Utility functions including mask preprocessing and instance mask separation from class-wise masks. |
-| `environment.yml` | Conda environment specification. Use to reproduce the exact dependency setup. |
-| `Gen_test-results.py` | Inference script to load the best model checkpoint and generate `test-results.json` for leaderboard submission. |
-| `val_gt.json` | Ground truth annotations for validation subset, automatically extracted from `train_gt.json` during training. Used in local COCOEval. |
-
+| File                  | Description                                                                                                                           |
+| :-------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `datasets.py`         | Custom PyTorch `Dataset` class to load images and per-instance cell masks for training/validation. Supports multi-class `.tif` masks. |
+| `train.py`            | Main training script. Supports AMP, FPN, attention modules, learning rate warmup, early stopping, and COCOEval-based mAP evaluation.  |
+| `transforms.py`       | Defines torchvision transforms for data augmentation during training and resizing/normalization during validation.                    |
+| `utils.py`            | Utility functions including mask preprocessing and instance mask separation from class-wise masks.                                    |
+| `environment.yml`     | Conda environment specification. Use to reproduce the exact dependency setup.                                                         |
+| `Gen_test-results.py` | Inference script to load the best model checkpoint and generate `test-results.json` for leaderboard submission.                       |
+| `val_gt.json`         | Ground truth annotations for validation subset, automatically extracted from `train_gt.json` during training. Used in local COCOEval. |
 
 ---
 
@@ -27,7 +26,6 @@ This project implements a customizable Mask R-CNN training pipeline for cell ins
 conda env create -f environment.yml
 conda activate dl-hw3
 ```
-
 
 ---
 
@@ -41,12 +39,12 @@ python train.py
 
 Key configurations inside `train.py`:
 
-* Backbone selection: `resnet50`, `resnext50_32x4d`, `efficientnet_b0`, etc.
-* AMP mixed precision enabled
-* Learning rate warmup for first 3 epochs
-* Early stopping after 30 epochs of no mAP improvement
-* COCO evaluation using `val_gt.json`
-* Best model saved to `saved_models/`
+- Backbone selection: `resnet50`, `resnext50_32x4d`, `efficientnet_b0`, etc.
+- AMP mixed precision enabled
+- Learning rate warmup for first 3 epochs
+- Early stopping after 30 epochs of no mAP improvement
+- COCO evaluation using `val_gt.json`
+- Best model saved to `saved_models/`
 
 ---
 
@@ -72,22 +70,22 @@ test-results.json
 
 Supported backbone configurations:
 
-* `maskrcnn_resnet50_fpn_v2`
-* `resnet50`, `resnet101`
-* `resnext50_32x4d`
-* `efficientnet_b0`, `efficientnet_b1`
+- `maskrcnn_resnet50_fpn_v2`
+- `resnet50`, `resnet101`
+- `resnext50_32x4d`
+- `efficientnet_b0`, `efficientnet_b1`
 
 Optional modules:
 
-* `SELayer`: Squeeze-and-Excitation Channel Attention
-* `CBAM`: Channel + Spatial Attention
-* Both attention modules can be patched into backbone before training.
+- `SELayer`: Squeeze-and-Excitation Channel Attention
+- `CBAM`: Channel + Spatial Attention
+- Both attention modules can be patched into backbone before training.
 
 ---
 
 ## Tips and Notes
 
-* Ensure the output **test-results.json** follows the COCO result format. The following is an example:
+- Ensure the output **test-results.json** follows the COCO result format. The following is an example:
 
 ```
 [
@@ -115,12 +113,30 @@ Optional modules:
 ]
 ```
 
-* `val_gt.json` is automatically created on first run of `train.py` to enable subset evaluation using COCOEval.
-* If your model causes OOM, reduce `BATCH_SIZE` or switch to lightweight backbones like `efficientnet_b0`.
+- `val_gt.json` is automatically created on first run of `train.py` to enable subset evaluation using COCOEval.
+- If your model causes OOM, reduce `BATCH_SIZE` or switch to lightweight backbones like `efficientnet_b0`.
 
 ---
 
 ## References
 
-See the [`Report`](./report.pdf) for detailed model comparison, architecture choices, and ablation studies.
-
+[1] K. He, G. Gkioxari, P. Dollár, and R. Girshick, Mask R-CNN, in Proceedings of the IEEE International
+Conference on Computer Vision (ICCV), 2017, pp. 2961–2969.
+[2] R. Wightman, PyTorch Image Models, GitHub Repository. [Online].
+Availab
+le: https://github.com/huggi
+ngface/pytorch-image-models
+[3] S. Woo, J. Park, J. Lee, and I. S. Kweon, CB
+AM: Convolutional Block Attention Module, in Proceedings of
+the European Conference on Computer Vision (ECCV), 2018, pp. 3–19.
+[4] J. Hu, L. Shen, and G. Sun, Squeeze-and-
+Excitation Networks, in Proceedings of the IEEE Conference
+on Computer Vision and Pattern Recognition (CVPR), 2018, pp. 7132–7141.
+[5] TorchVision Detection Models, PyTorch Documentation. [Online].
+Availab
+le: https://pytorch.org/visio
+n/stab
+le/models.html
+[6] COCO API, GitHub Repository. [Online].
+Availab
+le: https://github.com/cocodataset/cocoapi
